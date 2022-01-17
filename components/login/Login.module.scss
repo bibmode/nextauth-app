@@ -1,0 +1,58 @@
+.container {
+  min-height: 100vh;
+  min-width: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper {
+  color: #333333;
+  max-width: 47.4rem;
+  letter-spacing: -0.035em;
+  border: 1px solid #bdbdbd;
+  border-radius: 2.4rem;
+  padding: 4.8rem 5.8rem;
+
+  h1 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    line-height: 2.5rem;
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+  }
+
+  h2 {
+    text-align: center;
+  }
+}
+
+.socialWrapper {
+  text-align: center;
+
+  p {
+    font-size: 1.4rem;
+    font-weight: normal;
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    color: #828282;
+  }
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-inline: 7rem;
+
+  button {
+    width: 4.2rem;
+    height: 4.2rem;
+    border-radius: 50%;
+    border: 1px solid #828282;
+  }
+}

@@ -1,14 +1,30 @@
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
 
-import { Button, ClickAwayListener, Container, Divider } from "@mui/material";
+import {
+  Button,
+  ClickAwayListener,
+  Container,
+  Divider,
+  styled,
+} from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+
 import { useContext, useEffect } from "react";
 import Menu from "../menu/Menu";
 import styles from "./UserDetails.module.scss";
 import { AppContext } from "../layout/Layout";
+import ChangeInfo from "../changeInfo/ChangeInfo";
+
+const BackButton = styled(Button)({
+  fontSize: "1.8rem !important",
+  textTransform: "capitalize !important",
+  alignSelf: "flex-start !important",
+  marginBottom: "2rem",
+});
 
 const UserDetails = () => {
-  const { menu, setMenu } = useContext(AppContext);
+  const { menu, setMenu, setToggleEdit, toggleEdit } = useContext(AppContext);
 
   const { data: session } = useSession();
 
@@ -16,7 +32,14 @@ const UserDetails = () => {
 
   return (
     <div className={styles.wrapper}>
-      <Container sx={{ position: "relative" }}>
+      <Container
+        sx={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <div className={styles.header}>
           <img
             className={styles.headerLogo}
@@ -37,51 +60,78 @@ const UserDetails = () => {
           {menu && <Menu />}
         </div>
 
-        <h1>Personal info</h1>
-        <p>Basic info, like your name and photo</p>
-
         <div className={styles.main}>
+          {toggleEdit ? (
+            <BackButton
+              startIcon={<ArrowBackIosIcon />}
+              variant="text"
+              onClick={() => setToggleEdit(false)}
+            >
+              Back
+            </BackButton>
+          ) : (
+            <>
+              <h1>Personal info</h1>
+              <p>Basic info, like your name and photo</p>
+            </>
+          )}
+
           <div className={styles.mainWrapper}>
-            <div className={styles.mainTopBar}>
-              <h2>Profile</h2>
-              <p>Some info may be visible to other people</p>
-              <Button variant="outlined">Edit</Button>
-            </div>
-            <Divider />
+            {toggleEdit ? (
+              <ChangeInfo />
+            ) : (
+              <>
+                <div className={styles.mainTopBar}>
+                  <h2>Profile</h2>
+                  <p>Some info may be visible to other people</p>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setToggleEdit(true)}
+                  >
+                    Edit
+                  </Button>
+                </div>
+                <Divider />
 
-            <div className={styles.mainItem}>
-              <h3>photo</h3>
-              <div className={styles.mainItemPicture}>
-                <img
-                  src={user.image ? user.image : "user.png"}
-                  alt="user profile"
-                />
-              </div>
-            </div>
-            <Divider />
+                <div className={styles.mainItem}>
+                  <h3>photo</h3>
+                  <div className={styles.mainItemPicture}>
+                    <img
+                      src={user.image ? user.image : "user.png"}
+                      alt="user profile"
+                    />
+                  </div>
+                </div>
+                <Divider />
 
-            <div className={styles.mainItem}>
-              <h3>name</h3>
-              <p>{user?.name}</p>
-            </div>
-            <Divider />
+                <div className={styles.mainItem}>
+                  <h3>name</h3>
+                  <p>{user?.name}</p>
+                </div>
+                <Divider />
 
-            <div className={styles.mainItem}>
-              <h3>bio</h3>
-              <p>{user?.bio}</p>
-            </div>
-            <Divider />
+                <div className={styles.mainItem}>
+                  <h3>bio</h3>
+                  <p>{user?.bio}</p>
+                </div>
+                <Divider />
 
-            <div className={styles.mainItem}>
-              <h3>email</h3>
-              <p>{user?.email}</p>
-            </div>
-            <Divider />
+                <div className={styles.mainItem}>
+                  <h3>email</h3>
+                  <p>{user?.email}</p>
+                </div>
 
-            <div className={styles.mainItem}>
-              <h3>password</h3>
-              <p>{user?.password}</p>
-            </div>
+                {user.password && (
+                  <>
+                    <Divider />
+                    <div className={styles.mainItem}>
+                      <h3>password</h3>
+                      <p>{user.password}</p>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
       </Container>

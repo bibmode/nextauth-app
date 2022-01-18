@@ -87,6 +87,7 @@ export default NextAuth({
         });
 
         session.userId = result._id;
+        session.user.password = result.password;
       } else {
         session.userId = token.sub;
       }

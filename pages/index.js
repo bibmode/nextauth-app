@@ -1,7 +1,7 @@
 import { getSession, signOut } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import UserDetails from "../components/userDetails/UserDetails";
 import styles from "../styles/Home.module.css";
 

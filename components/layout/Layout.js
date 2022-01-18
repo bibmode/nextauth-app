@@ -28,6 +28,7 @@ const Layout = (props) => {
   const [toggleForm, setToggleForm] = useState(false); //true for register false for login
   const [loading, setLoading] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [toggleEdit, setToggleEdit] = useState(false);
 
   const handleClickAway = () => {
     setMenu(!menu);
@@ -67,6 +68,8 @@ const Layout = (props) => {
             menu,
             setMenu,
             handleClickAway,
+            toggleEdit,
+            setToggleEdit,
           }}
         >
           <main>{props.children}</main>

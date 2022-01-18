@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
 export default function Home({ session }) {
+  console.log(session);
+
   return (
     <div className={styles.container}>
       <h1>home</h1>

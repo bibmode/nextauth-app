@@ -13,6 +13,7 @@ import { signIn } from "next-auth/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { AppContext } from "../layout/Layout";
+import { useRouter } from "next/router";
 
 //form validation
 const validationSchema = yup.object({
@@ -28,6 +29,7 @@ const validationSchema = yup.object({
 
 const Login = () => {
   const { signUpEmail, toggleForm, setToggleForm } = useContext(AppContext);
+  const router = useRouter();
 
   const clearValues = () => {
     formik.values.email = "";
@@ -41,22 +43,21 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
       //register
       try {
         if (toggleForm) signUpEmail(values.email, values.password);
 
-        // //login
-        // if (!toggleForm) {
-        //   const status = await signIn("credentials", {
-        //     redirect: false,
-        //     email: values.email,
-        //     password: values.password,
-        //   });
+        //login
+        if (!toggleForm) {
+          const status = await signIn("credentials", {
+            callbackUrl: `${window.location.origin}/`,
+            email: values.email,
+            password: values.password,
+          });
 
-        //   if (status.url) redirectUser("profile");
-
-        //   console.log(status);
-        // }
+          // if (status.url) router.push("/");
+        }
       } catch (err) {
         console.log(err);
       }
@@ -78,11 +79,19 @@ const Login = () => {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <img src="devchallenges.svg" alt="logo" />
-        <h1>Join thousands of learners from around the world</h1>
-        <p>
-          Master web development by making real-life projects. There are
-          multiple paths for you to choose
-        </p>
+        <h1>
+          {" "}
+          {toggleForm
+            ? "Join thousands of learners from around the world"
+            : "Login"}
+        </h1>
+
+        {toggleForm && (
+          <p>
+            Master web development by making real-life projects. There are
+            multiple paths for you to choose
+          </p>
+        )}
 
         {/* form */}
         <form onSubmit={formik.handleSubmit}>
@@ -133,7 +142,7 @@ const Login = () => {
             fullWidth
             sx={{ textTransform: "none" }}
           >
-            Login
+            {toggleForm ? "Register" : "Login"}
           </Button>
         </form>
 
@@ -171,7 +180,17 @@ const Login = () => {
             </IconButton>
           </div>
 
-          <p>Already a member? Login</p>
+          {toggleForm ? (
+            <p>
+              Already a member?{" "}
+              <a onClick={() => setToggleForm(false)}>Login</a>
+            </p>
+          ) : (
+            <p>
+              {`${"Don't have an account yet?"}`}{" "}
+              <a onClick={() => setToggleForm(true)}>Register</a>
+            </p>
+          )}
         </div>
       </div>
     </div>

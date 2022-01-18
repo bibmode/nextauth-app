@@ -1,0 +1,52 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Noto Sans", sans-serif;
+
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  letter-spacing: -0.035em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.css-5mb3d8-MuiContainer-root {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+.css-40auor-MuiInputBase-root-MuiOutlinedInput-root {
+  font-size: 1.6rem !important;
+  border-radius: 8px !important;
+
+  &::placeholder {
+    color: #828282;
+  }
+}
+
+.css-i4bv87-MuiSvgIcon-root {
+  font-size: 2.4rem !important;
+}
+
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+  outline: 1px solid #828282;
+}
+
+.css-1488ky5-MuiButtonBase-root-MuiButton-root {
+  border-radius: 0.8rem;
+  padding-block: 0.8rem;
+}

@@ -1,4 +1,12 @@
-import { Button, IconButton, Input, InputAdornment } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  InputAdornment,
+  LinearProgress,
+  styled,
+  TextField,
+} from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
 import LockIcon from "@mui/icons-material/Lock";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -15,6 +23,18 @@ import * as yup from "yup";
 import { AppContext } from "../layout/Layout";
 import { useRouter } from "next/router";
 
+//styling material ui
+const SubmitButton = styled(Button)(({ theme }) => ({
+  fontSize: "16px",
+  lineHeight: "22px",
+  borderRadius: "8px !important",
+  paddingBlock: "8px",
+}));
+
+const Input = styled(TextField)(({ theme }) => ({
+  borderRadius: "8px !important",
+}));
+
 //form validation
 const validationSchema = yup.object({
   email: yup
@@ -28,13 +48,17 @@ const validationSchema = yup.object({
 });
 
 const Login = () => {
-  const { signUpEmail, toggleForm, setToggleForm } = useContext(AppContext);
-  const router = useRouter();
+  const { signUpEmail, toggleForm, setToggleForm, setLoading, loading } =
+    useContext(AppContext);
 
   const clearValues = () => {
     formik.values.email = "";
     formik.values.password = "";
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -43,10 +67,14 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      setLoading(true);
       //register
       try {
-        if (toggleForm) signUpEmail(values.email, values.password);
+        if (toggleForm) {
+          const result = await signUpEmail(values.email, values.password);
+
+          !result && setLoading(false);
+        }
 
         //login
         if (!toggleForm) {
@@ -70,6 +98,7 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
     signIn(provider, {
       callbackUrl: `${window.location.origin}/`,
     });
@@ -77,78 +106,79 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      {loading && <LinearProgress className={styles.loading} />}
       <div className={styles.wrapper}>
-        <img src="devchallenges.svg" alt="logo" />
-        <h1>
-          {" "}
-          {toggleForm
-            ? "Join thousands of learners from around the world"
-            : "Login"}
-        </h1>
+        <Container maxWidth="sm">
+          <img src="devchallenges.svg" alt="logo" />
 
-        {toggleForm && (
-          <p>
-            Master web development by making real-life projects. There are
-            multiple paths for you to choose
-          </p>
-        )}
+          {toggleForm ? (
+            <h1>Join thousands of learners from around the world</h1>
+          ) : (
+            <h1 className={styles.login}>Login</h1>
+          )}
 
-        {/* form */}
-        <form onSubmit={formik.handleSubmit}>
-          <Input
-            id="email"
-            name="email"
-            variant="outlined"
-            placeholder="Email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helpertext={formik.touched.email && formik.errors.email}
-            fullWidth
-            inputprops={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <MailIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 2, mt: 3.7 }}
-          />
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            variant="outlined"
-            placeholder="Password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helpertext={formik.touched.password && formik.errors.password}
-            fullWidth
-            inputprops={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 3 }}
-          />
-          <Button
-            type="submit"
-            id="submitBtn"
-            variant="contained"
-            disableElevation
-            fullWidth
-            sx={{ textTransform: "none" }}
-          >
-            {toggleForm ? "Register" : "Login"}
-          </Button>
-        </form>
+          {toggleForm && (
+            <p>
+              Master web development by making real-life projects. There are
+              multiple paths for you to choose
+            </p>
+          )}
 
-        {/* social media signin */}
-        <div className={styles.socialWrapper}>
-          <p>or continue with these social profile</p>
+          {/* form */}
+          <form onSubmit={formik.handleSubmit}>
+            <Input
+              id="email"
+              name="email"
+              variant="outlined"
+              placeholder="Email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helpertext={formik.touched.email && formik.errors.email}
+              fullWidth
+              inputprops={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MailIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 2, mt: 3.7 }}
+            />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              variant="outlined"
+              placeholder="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helpertext={formik.touched.password && formik.errors.password}
+              fullWidth
+              inputprops={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 3 }}
+            />
+            <SubmitButton
+              type="submit"
+              id="submitBtn"
+              variant="contained"
+              disableElevation
+              fullWidth
+              sx={{ textTransform: "none" }}
+            >
+              {toggleForm ? "Register" : "Login"}
+            </SubmitButton>
+          </form>
+
+          {/* social media signin */}
+          <h2>or continue with these social profile</h2>
 
           <div className={styles.icons}>
             <IconButton
@@ -181,17 +211,17 @@ const Login = () => {
           </div>
 
           {toggleForm ? (
-            <p>
+            <h2>
               Already a member?{" "}
               <a onClick={() => setToggleForm(false)}>Login</a>
-            </p>
+            </h2>
           ) : (
-            <p>
+            <h2>
               {`${"Don't have an account yet?"}`}{" "}
               <a onClick={() => setToggleForm(true)}>Register</a>
-            </p>
+            </h2>
           )}
-        </div>
+        </Container>
       </div>
     </div>
   );

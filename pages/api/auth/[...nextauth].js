@@ -74,8 +74,23 @@ export default NextAuth({
   },
   adapter: MongoDBAdapter(clientPromise),
   callbacks: {
-    async session({ session, token }) {
-      session.userId = token.sub;
+    async session({ session, user, token }) {
+      if (!token.sub) {
+        const client = await MongoClient.connect(process.env.MONGODB_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        const users = await client.db().collection("users");
+
+        const result = await users.findOne({
+          email: token.email,
+        });
+
+        session.userId = result._id;
+      } else {
+        session.userId = token.sub;
+      }
+
       return session;
     },
   },

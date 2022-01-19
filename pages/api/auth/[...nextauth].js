@@ -74,24 +74,35 @@ export default NextAuth({
   },
   adapter: MongoDBAdapter(clientPromise),
   callbacks: {
-    async session({ session, user, token }) {
-      if (!token.sub) {
-        const client = await MongoClient.connect(process.env.MONGODB_URI, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        });
-        const users = await client.db().collection("users");
+    jwt: async ({ token, user }) => {
+      const client = await MongoClient.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
 
-        const result = await users.findOne({
-          email: token.email,
-        });
+      //Get all the users
+      const users = await client.db().collection("users");
+      //Find user with the email
+      const result = await users.findOne({
+        email: token.email,
+      });
 
-        session.userId = result._id;
-        session.user.password = result.password;
-      } else {
-        session.userId = token.sub;
+      if (result && !result.bio) {
+        users.update({ email: token.email }, { $set: { bio: "Add bio" } });
       }
 
+      if (result && !result.phone) {
+        users.update({ email: token.email }, { $set: { phone: "Add phone" } });
+      }
+
+      console.log(result);
+
+      token.bio = result.bio;
+      token.phone = result.phone;
+      return token;
+    },
+    session: async ({ session, token }) => {
+      session.user = token;
       return session;
     },
   },

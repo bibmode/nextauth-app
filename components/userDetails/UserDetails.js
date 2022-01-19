@@ -27,8 +27,12 @@ const UserDetails = () => {
   const { menu, setMenu, setToggleEdit, toggleEdit } = useContext(AppContext);
 
   const { data: session } = useSession();
+  console.log(session);
 
   const user = session.user;
+
+  // const details = getUserDetails(session.user.email);
+  // console.log(details);
 
   return (
     <div className={styles.wrapper}>
@@ -53,7 +57,7 @@ const UserDetails = () => {
             className={styles.headerProfile}
           >
             <img
-              src={user.image ? user.image : "user.png"}
+              src={user.picture ? user.picture : "user.png"}
               alt="user profile"
             />
           </button>
@@ -97,7 +101,7 @@ const UserDetails = () => {
                   <h3>photo</h3>
                   <div className={styles.mainItemPicture}>
                     <img
-                      src={user.image ? user.image : "user.png"}
+                      src={user.picture ? user.picture : "user.png"}
                       alt="user profile"
                     />
                   </div>
@@ -113,6 +117,12 @@ const UserDetails = () => {
                 <div className={styles.mainItem}>
                   <h3>bio</h3>
                   <p>{user?.bio}</p>
+                </div>
+                <Divider />
+
+                <div className={styles.mainItem}>
+                  <h3>phone</h3>
+                  <p>{user?.phone}</p>
                 </div>
                 <Divider />
 

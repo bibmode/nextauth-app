@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, LinearProgress } from "@mui/material";
+import axios from "axios";
 import { createContext, useState } from "react";
 
 export const theme = createTheme({
@@ -29,6 +30,7 @@ const Layout = (props) => {
   const [loading, setLoading] = useState(false);
   const [menu, setMenu] = useState(false);
   const [toggleEdit, setToggleEdit] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleClickAway = () => {
     setMenu(!menu);
@@ -55,6 +57,15 @@ const Layout = (props) => {
     }
   };
 
+  const getUserDetails = async (email) => {
+    try {
+      const res = await axios.get("/api/user-details");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -70,6 +81,7 @@ const Layout = (props) => {
             handleClickAway,
             toggleEdit,
             setToggleEdit,
+            getUserDetails,
           }}
         >
           <main>{props.children}</main>

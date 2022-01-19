@@ -24,12 +24,12 @@ const BackButton = styled(Button)({
 });
 
 const UserDetails = () => {
-  const { menu, setMenu, setToggleEdit, toggleEdit } = useContext(AppContext);
+  const { menu, setMenu, setToggleEdit, toggleEdit, loading, userDetails } =
+    useContext(AppContext);
 
   const { data: session } = useSession();
-  console.log(session);
 
-  const user = session.user;
+  const user = userDetails ? userDetails : session.user;
 
   // const details = getUserDetails(session.user.email);
   // console.log(details);
@@ -67,6 +67,7 @@ const UserDetails = () => {
         <div className={styles.main}>
           {toggleEdit ? (
             <BackButton
+              disabled={loading ? true : false}
               startIcon={<ArrowBackIosIcon />}
               variant="text"
               onClick={() => setToggleEdit(false)}

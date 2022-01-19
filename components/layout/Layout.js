@@ -3,6 +3,9 @@ import { createTheme, LinearProgress } from "@mui/material";
 import axios from "axios";
 import { createContext, useState } from "react";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -30,7 +33,7 @@ const Layout = (props) => {
   const [loading, setLoading] = useState(false);
   const [menu, setMenu] = useState(false);
   const [toggleEdit, setToggleEdit] = useState(false);
-  const [user, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
 
   const handleClickAway = () => {
     setMenu(!menu);
@@ -82,8 +85,23 @@ const Layout = (props) => {
             toggleEdit,
             setToggleEdit,
             getUserDetails,
+            userDetails,
+            setUserDetails,
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            style={{ fontSize: "1.6rem" }}
+          />
+          {/* <ToastContainer /> */}
           <main>{props.children}</main>
         </AppContext.Provider>
       </ThemeProvider>

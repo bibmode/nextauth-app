@@ -97,12 +97,14 @@ export default NextAuth({
 
       console.log(result);
 
+      token.name = result.name;
       token.bio = result.bio;
       token.phone = result.phone;
       return token;
     },
     session: async ({ session, token }) => {
       session.user = token;
+
       return session;
     },
   },

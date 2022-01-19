@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./ChangeInfo.module.scss";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSession } from "next-auth/react";
+import { AppContext } from "../layout/Layout";
+import { toast } from "react-toastify";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -13,35 +15,47 @@ const validationSchema = yup.object({
   phone: yup
     .string("Enter your phone")
     .matches(phoneRegExp, "Enter a valid phone number"),
-  email: yup.string("Enter your email").email("Enter a valid email"),
+  // email: yup.string("Enter your email").email("Enter a valid email"),
   password: yup
     .string("Enter your password")
     .min(8, "Password should be of minimum 8 characters length"),
 });
 
 const ChangeInfo = () => {
+  const { setLoading, loading, setUserDetails, userDetails } =
+    useContext(AppContext);
   const { data: session } = useSession();
 
-  const user = session.user;
+  const user = userDetails ? userDetails : session.user;
   // console.log(session);
+
+  const clearValues = () => {
+    formik.values.name = "";
+    formik.values.bio = "";
+    formik.values.phone = "";
+  };
+
+  useEffect(() => {
+    clearValues();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       bio: "",
       phone: "",
-      email: "",
-      password: "",
+      photo: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       let userData = {};
 
       userData.name = values.name ? values.name : user.name;
       userData.bio = values.bio ? values.bio : user.bio;
       userData.phone = values.phone ? values.phone : user.phone;
-      userData.email = values.email ? values.email : user.email;
-      // userData.userId = session.userId;
+      userData.email = user.email;
+      userData.picture = values.picture ? values.picture : user.picture;
 
       console.log(userData);
 
@@ -51,7 +65,14 @@ const ChangeInfo = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      }).catch((err) => console.log(err));
+      });
+
+      if (res.status === 201) toast.success("Success!");
+
+      userData && setUserDetails(userData);
+      setLoading(false);
+      clearValues();
+      console.log(res);
     },
   });
 
@@ -62,7 +83,7 @@ const ChangeInfo = () => {
 
       <div className={styles.picture}>
         <img
-          src={user?.image ? user.image : "user.png"}
+          src={user?.picture ? user.picture : "user.png"}
           alt="profile picture"
         />
         <button>change photo</button>
@@ -77,7 +98,6 @@ const ChangeInfo = () => {
           placeholder="Enter your name..."
           value={formik.values.name}
           onChange={formik.handleChange}
-          helpertext={formik.touched.name && formik.errors.name}
         />
 
         <label htmlFor="bio">Bio</label>
@@ -88,12 +108,11 @@ const ChangeInfo = () => {
           placeholder="Enter your bio..."
           value={formik.values.bio}
           onChange={formik.handleChange}
-          helpertext={formik.touched.bio && formik.errors.bio}
         />
 
         <label htmlFor="phone">Phone</label>
         <input
-          type="number"
+          type="text"
           id="phone"
           name="phone"
           placeholder="Enter your phone..."
@@ -103,7 +122,7 @@ const ChangeInfo = () => {
           helpertext={formik.touched.phone && formik.errors.phone}
         />
 
-        <label htmlFor="email">Email</label>
+        {/* <label htmlFor="email">Email</label>
         <input
           type="email"
           id="email"
@@ -113,7 +132,7 @@ const ChangeInfo = () => {
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helpertext={formik.touched.email && formik.errors.email}
-        />
+        /> */}
 
         {user?.password && (
           <>
@@ -137,6 +156,7 @@ const ChangeInfo = () => {
           id="submitBtn"
           variant="contained"
           disableElevation
+          disabled={loading ? true : false}
           sx={{
             textTransform: "capitalize",
             width: "fit-content",

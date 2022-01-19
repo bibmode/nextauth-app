@@ -21,7 +21,7 @@ import { signIn } from "next-auth/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { AppContext } from "../layout/Layout";
-import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 //styling material ui
 const SubmitButton = styled(Button)(({ theme }) => ({
@@ -50,11 +50,6 @@ const validationSchema = yup.object({
 const Login = () => {
   const { signUpEmail, toggleForm, setToggleForm, setLoading, loading } =
     useContext(AppContext);
-
-  const clearValues = () => {
-    formik.values.email = "";
-    formik.values.password = "";
-  };
 
   useEffect(() => {
     setLoading(false);
@@ -88,6 +83,7 @@ const Login = () => {
         }
       } catch (err) {
         console.log(err);
+        toast.error("error");
       }
     },
   });

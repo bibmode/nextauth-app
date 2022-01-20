@@ -35,7 +35,7 @@ const Input = styled(TextField)({
 });
 
 const ProviderBtn = styled(IconButton)({
-  borderRadius: "8px !important",
+  borderRadius: "50% !important",
   border: "1px solid #828282",
 });
 
@@ -174,7 +174,7 @@ const Login = () => {
               variant="contained"
               disableElevation
               fullWidth
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", mb: "1.5rem" }}
               disabled={loading}
             >
               {toggleForm ? "Register" : "Login"}

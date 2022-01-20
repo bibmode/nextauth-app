@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Login from "../components/login/Login";
 import { getSession } from "next-auth/react";
 import { LinearProgress } from "@mui/material";
+import { AppContext } from "../components/layout/Layout";
 
 const LoginPage = ({ session }) => {
+  const { loading } = useContext(AppContext);
+
   return (
     <>
       {loading && <LinearProgress />}

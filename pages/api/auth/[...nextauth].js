@@ -87,6 +87,10 @@ export default NextAuth({
         email: token.email,
       });
 
+      if (result && !result.name) {
+        users.update({ email: token.email }, { $set: { name: "Add name" } });
+      }
+
       if (result && !result.bio) {
         users.update({ email: token.email }, { $set: { bio: "Add bio" } });
       }
@@ -94,8 +98,6 @@ export default NextAuth({
       if (result && !result.phone) {
         users.update({ email: token.email }, { $set: { phone: "Add phone" } });
       }
-
-      console.log(result);
 
       token.name = result.name;
       token.bio = result.bio;

@@ -24,16 +24,16 @@ import { AppContext } from "../layout/Layout";
 import { toast } from "react-toastify";
 
 //styling material ui
-const SubmitButton = styled(Button)(({ theme }) => ({
+const SubmitButton = styled(Button)({
   fontSize: "16px",
   lineHeight: "22px",
   borderRadius: "8px !important",
   paddingBlock: "8px",
-}));
+});
 
-const Input = styled(TextField)(({ theme }) => ({
+const Input = styled(TextField)({
   borderRadius: "8px !important",
-}));
+});
 
 //form validation
 const validationSchema = yup.object({

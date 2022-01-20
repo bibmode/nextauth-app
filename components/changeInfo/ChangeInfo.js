@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./ChangeInfo.module.scss";
-import { ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSession } from "next-auth/react";
 import { AppContext } from "../layout/Layout";

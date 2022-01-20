@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Login from "../components/login/Login";
-import { getProviders, getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
+import { LinearProgress } from "@mui/material";
 
 const LoginPage = ({ session }) => {
   return (
     <>
+      {loading && <LinearProgress />}
       <Login />
     </>
   );

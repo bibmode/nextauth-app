@@ -1,25 +1,16 @@
 import { Button } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./ChangeInfo.module.scss";
-import { useFormik } from "formik";
+import { ErrorMessage, useFormik } from "formik";
 import * as yup from "yup";
 import { useSession } from "next-auth/react";
 import { AppContext } from "../layout/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
 //form validation
 const validationSchema = yup.object({
-  phone: yup
-    .string("Enter your phone")
-    .matches(phoneRegExp, "Enter a valid phone number"),
-  // email: yup.string("Enter your email").email("Enter a valid email"),
-  password: yup
-    .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length"),
+  phone: yup.string().matches(/\d/g, "Enter a valid phone number"),
 });
 
 const ChangeInfo = () => {
@@ -47,26 +38,29 @@ const ChangeInfo = () => {
     document.getElementById("image-upload").click();
   };
 
-  // const handleUpload = (e) => {
-  //   console.log(e.target.files[0]);
-  //   uploadImage(e.target.files[0]);
-  // };
+  const initialImage = (e) => {
+    console.log(e.target.files[0]);
+    const initialUrl = window.URL.createObjectURL(e.target.files[0]);
+    setUrl(initialUrl);
+    setImage(e.target.files[0]);
+  };
 
-  const handleUpload = async (e) => {
+  const handleUpload = async () => {
     const data = new FormData();
-    data.append("file", e.target.files[0]);
+    data.append("file", image);
+    console.log();
     data.append("upload_preset", "ih5pyoxb");
     data.append("clous_name", "genepulp");
 
     try {
-      setLoading(true);
       const dataUpload = await axios.post(
         "https://api.cloudinary.com/v1_1/genepulp/image/upload",
         data
       );
       console.log(dataUpload);
       setUrl(dataUpload.data.url);
-      setLoading(false);
+
+      return dataUpload.data.url;
     } catch (error) {
       console.log(error);
     }
@@ -84,12 +78,14 @@ const ChangeInfo = () => {
       setLoading(true);
       let userData = {};
 
+      const cloudinaryPic = url ? await handleUpload() : null;
+
       userData.name = values.name ? values.name : user.name;
       userData.bio = values.bio ? values.bio : user.bio;
       userData.phone = values.phone ? values.phone : user.phone;
       userData.email = user.email;
-      userData.picture = url
-        ? url
+      userData.picture = cloudinaryPic
+        ? cloudinaryPic
         : values.picture
         ? values.picture
         : user.picture;
@@ -129,10 +125,10 @@ const ChangeInfo = () => {
       <form className={styles.form} onSubmit={formik.handleSubmit}>
         <input
           type="file"
-          name="image-ipload"
+          name="image-upload"
           id="image-upload"
           accept="image/*"
-          onChange={handleUpload}
+          onChange={initialImage}
           hidden
         />
         <label htmlFor="name">Name</label>
@@ -157,44 +153,19 @@ const ChangeInfo = () => {
 
         <label htmlFor="phone">Phone</label>
         <input
+          className={formik.errors.phone && styles.formPhone}
           type="text"
           id="phone"
           name="phone"
           placeholder="Enter your phone..."
           value={formik.values.phone}
           onChange={formik.handleChange}
-          error={formik.touched.phone && Boolean(formik.errors.phone)}
+          error={`${formik.touched.phone && Boolean(formik.errors.phone)}`}
           helpertext={formik.touched.phone && formik.errors.phone}
         />
-
-        {/* <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Enter your email..."
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helpertext={formik.touched.email && formik.errors.email}
-        /> */}
-
-        {user?.password && (
-          <>
-            {" "}
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your new password..."
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helpertext={formik.touched.password && formik.errors.password}
-            />
-          </>
-        )}
+        {formik.errors.phone ? (
+          <h3 className={styles.formError}>{formik.errors.phone}</h3>
+        ) : null}
 
         <Button
           type="submit"

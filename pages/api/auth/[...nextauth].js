@@ -100,6 +100,7 @@ export default NextAuth({
       token.name = result.name;
       token.bio = result.bio;
       token.phone = result.phone;
+      token.picture = result.image;
       return token;
     },
     session: async ({ session, token }) => {

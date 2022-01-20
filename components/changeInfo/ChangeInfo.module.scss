@@ -74,6 +74,19 @@
     }
   }
 
+  &Phone {
+    outline-color: #ff2d55;
+    border: 2px solid #ff2d55 !important;
+  }
+
+  &Error {
+    color: #ff2d55;
+    font-size: 1.4rem;
+    font-weight: inherit;
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+  }
+
   button {
     font-weight: 500;
     font-size: 1.6rem;

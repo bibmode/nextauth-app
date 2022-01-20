@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 
 async function handler(req, res) {
   if (req.method === "POST") {
-    const { email, name, bio, phone } = req.body;
+    const { email, name, bio, phone, picture } = req.body;
 
     //Connect with database
     const client = await MongoClient.connect(process.env.MONGODB_URI, {
@@ -22,6 +22,7 @@ async function handler(req, res) {
           name: name,
           bio: bio,
           phone: phone,
+          image: picture,
         },
       }
     );

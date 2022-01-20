@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./ChangeInfo.module.scss";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSession } from "next-auth/react";
 import { AppContext } from "../layout/Layout";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -24,6 +25,9 @@ const validationSchema = yup.object({
 const ChangeInfo = () => {
   const { setLoading, loading, setUserDetails, userDetails } =
     useContext(AppContext);
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState(null);
+
   const { data: session } = useSession();
 
   const user = userDetails ? userDetails : session.user;
@@ -38,6 +42,35 @@ const ChangeInfo = () => {
   useEffect(() => {
     clearValues();
   }, []);
+
+  const openFile = () => {
+    document.getElementById("image-upload").click();
+  };
+
+  // const handleUpload = (e) => {
+  //   console.log(e.target.files[0]);
+  //   uploadImage(e.target.files[0]);
+  // };
+
+  const handleUpload = async (e) => {
+    const data = new FormData();
+    data.append("file", e.target.files[0]);
+    data.append("upload_preset", "ih5pyoxb");
+    data.append("clous_name", "genepulp");
+
+    try {
+      setLoading(true);
+      const dataUpload = await axios.post(
+        "https://api.cloudinary.com/v1_1/genepulp/image/upload",
+        data
+      );
+      console.log(dataUpload);
+      setUrl(dataUpload.data.url);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -55,7 +88,11 @@ const ChangeInfo = () => {
       userData.bio = values.bio ? values.bio : user.bio;
       userData.phone = values.phone ? values.phone : user.phone;
       userData.email = user.email;
-      userData.picture = values.picture ? values.picture : user.picture;
+      userData.picture = url
+        ? url
+        : values.picture
+        ? values.picture
+        : user.picture;
 
       console.log(userData);
 
@@ -83,13 +120,21 @@ const ChangeInfo = () => {
 
       <div className={styles.picture}>
         <img
-          src={user?.picture ? user.picture : "user.png"}
+          src={url ? url : user?.picture ? user.picture : "user.png"}
           alt="profile picture"
         />
-        <button>change photo</button>
+        <button onClick={openFile}>change photo</button>
       </div>
 
       <form className={styles.form} onSubmit={formik.handleSubmit}>
+        <input
+          type="file"
+          name="image-ipload"
+          id="image-upload"
+          accept="image/*"
+          onChange={handleUpload}
+          hidden
+        />
         <label htmlFor="name">Name</label>
         <input
           type="text"

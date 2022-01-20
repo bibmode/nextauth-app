@@ -106,7 +106,6 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      {loading && <LinearProgress className={styles.loading} />}
       <div className={styles.wrapper}>
         <Container maxWidth="sm">
           <img src="devchallenges.svg" alt="logo" />
@@ -172,6 +171,7 @@ const Login = () => {
               disableElevation
               fullWidth
               sx={{ textTransform: "none" }}
+              disabled={!loading}
             >
               {toggleForm ? "Register" : "Login"}
             </SubmitButton>
@@ -184,6 +184,7 @@ const Login = () => {
             <IconButton
               aria-label="google"
               onClick={() => handleClick("google")}
+              disabled={!loading}
             >
               <GoogleIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -191,6 +192,7 @@ const Login = () => {
             <IconButton
               aria-label="facebook"
               onClick={() => handleClick("facebook")}
+              disabled={!loading}
             >
               <FacebookIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -198,6 +200,7 @@ const Login = () => {
             <IconButton
               aria-label="twitter"
               onClick={() => handleClick("twitter")}
+              disabled={!loading}
             >
               <TwitterIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -205,6 +208,7 @@ const Login = () => {
             <IconButton
               aria-label="github"
               onClick={() => handleClick("github")}
+              disabled={!loading}
             >
               <GitHubIcon sx={{ fontSize: 22 }} />
             </IconButton>

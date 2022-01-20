@@ -137,9 +137,9 @@ const Login = () => {
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
-              helpertext={formik.touched.email && formik.errors.email}
+              helperText={formik.touched.email && formik.errors.email}
               fullWidth
-              inputprops={{
+              InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <MailIcon />
@@ -157,9 +157,9 @@ const Login = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
-              helpertext={formik.touched.password && formik.errors.password}
+              helperText={formik.touched.password && formik.errors.password}
               fullWidth
-              inputprops={{
+              InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />

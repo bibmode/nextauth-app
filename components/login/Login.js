@@ -171,7 +171,7 @@ const Login = () => {
               disableElevation
               fullWidth
               sx={{ textTransform: "none" }}
-              disabled={!loading}
+              disabled={loading}
             >
               {toggleForm ? "Register" : "Login"}
             </SubmitButton>
@@ -184,7 +184,7 @@ const Login = () => {
             <IconButton
               aria-label="google"
               onClick={() => handleClick("google")}
-              disabled={!loading}
+              disabled={loading}
             >
               <GoogleIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -192,7 +192,7 @@ const Login = () => {
             <IconButton
               aria-label="facebook"
               onClick={() => handleClick("facebook")}
-              disabled={!loading}
+              disabled={loading}
             >
               <FacebookIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -200,7 +200,7 @@ const Login = () => {
             <IconButton
               aria-label="twitter"
               onClick={() => handleClick("twitter")}
-              disabled={!loading}
+              disabled={loading}
             >
               <TwitterIcon sx={{ fontSize: 22 }} />
             </IconButton>
@@ -208,7 +208,7 @@ const Login = () => {
             <IconButton
               aria-label="github"
               onClick={() => handleClick("github")}
-              disabled={!loading}
+              disabled={loading}
             >
               <GitHubIcon sx={{ fontSize: 22 }} />
             </IconButton>

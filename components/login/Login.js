@@ -3,7 +3,6 @@ import {
   Container,
   IconButton,
   InputAdornment,
-  LinearProgress,
   styled,
   TextField,
 } from "@mui/material";
@@ -33,6 +32,11 @@ const SubmitButton = styled(Button)({
 
 const Input = styled(TextField)({
   borderRadius: "8px !important",
+});
+
+const ProviderBtn = styled(IconButton)({
+  borderRadius: "8px !important",
+  border: "1px solid #828282",
 });
 
 //form validation
@@ -181,37 +185,37 @@ const Login = () => {
           <h2>or continue with these social profile</h2>
 
           <div className={styles.icons}>
-            <IconButton
+            <ProviderBtn
               aria-label="google"
               onClick={() => handleClick("google")}
               disabled={loading}
             >
               <GoogleIcon sx={{ fontSize: 22 }} />
-            </IconButton>
+            </ProviderBtn>
 
-            <IconButton
+            <ProviderBtn
               aria-label="facebook"
               onClick={() => handleClick("facebook")}
               disabled={loading}
             >
               <FacebookIcon sx={{ fontSize: 22 }} />
-            </IconButton>
+            </ProviderBtn>
 
-            <IconButton
+            <ProviderBtn
               aria-label="twitter"
               onClick={() => handleClick("twitter")}
               disabled={loading}
             >
               <TwitterIcon sx={{ fontSize: 22 }} />
-            </IconButton>
+            </ProviderBtn>
 
-            <IconButton
+            <ProviderBtn
               aria-label="github"
               onClick={() => handleClick("github")}
               disabled={loading}
             >
               <GitHubIcon sx={{ fontSize: 22 }} />
-            </IconButton>
+            </ProviderBtn>
           </div>
 
           {toggleForm ? (

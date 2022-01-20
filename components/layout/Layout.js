@@ -3,7 +3,7 @@ import { createTheme, LinearProgress } from "@mui/material";
 import axios from "axios";
 import { createContext, useState } from "react";
 
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const theme = createTheme({
@@ -54,16 +54,15 @@ const Layout = (props) => {
     const data = await res.json();
 
     if (data.message === "User already exists") {
-      console.log(data.message);
+      toast.error(data.message);
     } else if (data.message === "User created") {
-      console.log(data.message);
+      toast.success(data.message);
     }
   };
 
-  const getUserDetails = async (email) => {
+  const getUserDetails = async () => {
     try {
       const res = await axios.get("/api/user-details");
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

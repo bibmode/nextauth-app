@@ -5,7 +5,6 @@ async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const session = await getSession({ req });
-      console.log(session);
 
       if (!session) {
         return res.status(500).json({ msg: "invalid authentication!" });
@@ -22,7 +21,6 @@ async function handler(req, res) {
 
       const user = await db.collection("users").find({ email: email });
 
-      console.log(user);
       res.json(user);
     } catch (err) {
       return res.status(500).json({ msg: err.message });

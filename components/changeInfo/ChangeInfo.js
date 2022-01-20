@@ -22,7 +22,6 @@ const ChangeInfo = () => {
   const { data: session } = useSession();
 
   const user = userDetails ? userDetails : session.user;
-  // console.log(session);
 
   const clearValues = () => {
     formik.values.name = "";
@@ -39,7 +38,6 @@ const ChangeInfo = () => {
   };
 
   const initialImage = (e) => {
-    console.log(e.target.files[0]);
     const initialUrl = window.URL.createObjectURL(e.target.files[0]);
     setUrl(initialUrl);
     setImage(e.target.files[0]);
@@ -48,7 +46,6 @@ const ChangeInfo = () => {
   const handleUpload = async () => {
     const data = new FormData();
     data.append("file", image);
-    console.log();
     data.append("upload_preset", "ih5pyoxb");
     data.append("clous_name", "genepulp");
 
@@ -57,7 +54,6 @@ const ChangeInfo = () => {
         "https://api.cloudinary.com/v1_1/genepulp/image/upload",
         data
       );
-      console.log(dataUpload);
       setUrl(dataUpload.data.url);
 
       return dataUpload.data.url;
@@ -90,8 +86,6 @@ const ChangeInfo = () => {
         ? values.picture
         : user.picture;
 
-      console.log(userData);
-
       const res = await fetch("/api/update-user", {
         method: "POST",
         body: JSON.stringify(userData),
@@ -105,7 +99,6 @@ const ChangeInfo = () => {
       userData && setUserDetails(userData);
       setLoading(false);
       clearValues();
-      console.log(res);
     },
   });
 

@@ -31,9 +31,6 @@ const UserDetails = () => {
 
   const user = userDetails ? userDetails : session.user;
 
-  // const details = getUserDetails(session.user.email);
-  // console.log(details);
-
   return (
     <div className={styles.wrapper}>
       <Container

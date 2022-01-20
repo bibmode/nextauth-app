@@ -82,7 +82,6 @@ const Login = () => {
           // if (status.url) router.push("/");
         }
       } catch (err) {
-        console.log(err);
         toast.error("error");
       }
     },
@@ -90,7 +89,7 @@ const Login = () => {
 
   const handleClick = (provider) => {
     if (provider === "twitter") {
-      console.log("twitter don't work");
+      toast.info("Please choose another method!");
       return;
     }
 
